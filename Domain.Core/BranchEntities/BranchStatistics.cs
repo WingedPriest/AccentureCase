@@ -12,7 +12,7 @@ namespace Domain.Core.BranchEntities
         [Required]
         public int Id { get; set; }
         public int BranchId { get; set; }//Номер филиала
-        public decimal BalancesheetCurrency { get; set; }//Баланс ввалюты
+        public decimal BalancesheetCurrency { get; set; }//Баланс валюты
         public decimal BalanceSheetProfit { get; set; }//Балансовая прибыль
         public decimal LoansLegalEntities { get; set; }//Кредиты юридическим лицам
         public decimal LoansIndividuals { get; set; }//Кредиты физическим лицам
@@ -22,6 +22,9 @@ namespace Domain.Core.BranchEntities
         public decimal NumberEmployees { get; set; }//Численность сотрудников
         public string ReportDate { get; set; }//Дата
 
-
+        public override string ToString()
+        {
+            return $"Филиал №: {BranchId}";
+        }
     }
 }

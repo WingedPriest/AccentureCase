@@ -2,68 +2,94 @@
 @using System.Globalization
 
 <div class="container-fluid">
-    <!--<h1 align="center">Статистика по филиалам</h1>
+    <h1 align="center">Статистика по филиалам</h1>
     <div class="row">
-        <div class="col-6">
-            <RadzenCard Style="font-size: 24px" align="center">
-                <h2>Валютное состояние счетов в банке</h2>
+        <div class="col">
+            <RadzenCard Style="font-size: 16px" align="center">
+                <h2>Состояние валютного счета филиалов</h2>
                 <div class="row">
-                    <div class="col-2">
-                        <h6>Cумма счетов в рублях:@curAccounts[0].Count</h6>
-                        <h6>Сумма счетов в долларах:@curAccounts[1].Count</h6>
-                    </div>
-                    <div class="col-10">
+                    <div class="col-12">
                         <RadzenChart>
-                            <RadzenColumnSeries Data="@curAccounts" CategoryProperty="Cur" Title="Баланс" LineType="LineType.Dashed" ValueProperty="Count" />
-                            <RadzenColumnOptions Radius="5" />
-                            <RadzenValueAxis Formatter="@FormatAsUSD">
-                                <RadzenGridLines Visible="true" />-->
-                                @*<RadzenAxisTitle Text="Revenue in USD"  Style=""/>*@
-                            <!--</RadzenValueAxis>
+                            @foreach (var item in branchStatistics1)
+                            {
+                                <RadzenLineSeries Smooth="true" Data="@item" CategoryProperty="ReportDate" Title=@item[0].ToString() LineType="LineType.Dashed" ValueProperty="BalancesheetCurrency">
+                                    <RadzenMarkers MarkerType="MarkerType.Square" />
+                                </RadzenLineSeries>
+                            }
+                            <RadzenCategoryAxis Padding="20" FormatString="{0:MMM}" />
+                            <RadzenValueAxis>
+                                <RadzenGridLines Visible="true" />
+                                <RadzenAxisTitle Text="Баланс в рублях" />
+                            </RadzenValueAxis>
                         </RadzenChart>
+                        <div class="row">
+                            <div class="col-6">
+                                <h2>Выдача кредитов юр. лицам</h2>
+                                <p>Филиал № @ur</p>
+                                <RadzenSlider @bind-Value=@ur TValue="int" Min="0" Max="9" Change=@(args => OnChangeUr())/>
+                                <RadzenChart>
+                                        <RadzenPieSeries Data="@branchStatisticsUR" Title="Выдано" CategoryProperty="ReportDate" ValueProperty="LoansLegalEntities" />
+                                </RadzenChart>
+                            </div>
+                            <div class="col-6">
+                                <h2>Выдача кредитов физ.лицам</h2>
+                                <p>Филиал № @ur</p>
+                                <RadzenSlider @bind-Value=@fiz TValue="int" Min="0" Max="9" Change=@(args => OnChangeFiz()) />
+                                <RadzenChart>
+                                    <RadzenPieSeries Data="@branchStatisticsFIZ" Title="Выдано" CategoryProperty="ReportDate" ValueProperty="LoansIndividuals" />
+                                </RadzenChart>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </RadzenCard>
+            
         </div>
-        <div class="col-6">
-            <RadzenCard Style="font-size: 24px" align="center">
-                <h2>Гендерный состав клиентов банка</h2>
-                <div class="row">
-                    <div class="col-4">
-                        <h6>Клиентов мужчин:@genderClients[0].Count</h6>
-                        <h6>Клиентов женщин:@genderClients[1].Count</h6>
-                    </div>
-                    <div class="col-8">
-                        <RadzenChart>
-                            <RadzenDonutSeries Data="@genderClients" CategoryProperty="Gender" ValueProperty="Count">
-                                <TitleTemplate>
-                                </TitleTemplate>
-                            </RadzenDonutSeries>
-                        </RadzenChart>
-                    </div>
-                </div>
-            </RadzenCard>
-            <RadzenCard Style="font-size: 24px" align="center">
-                <h2>Возрастной состав клиентов банка</h2>
-                <div class="row">-->
-                    @*<div class="col-2">
-                            <h6>18-44 года:@ageClients[0].Count</h6>
-                            <h6>45-59 лет:@ageClients[1].Count</h6>
-                            <h6>60-74 лет:@ageClients[2].Count</h6>
-                            <h6>75-90 лет:@ageClients[3].Count</h6>
-                            <h6>старше 90 лет:@ageClients[4].Count</h6>
-                        </div>*@
-                    <!--<div class="col-12">
-                        <RadzenChart Style="font-size: 16px">
-                            <RadzenPieSeries Data="@ageClients" Title="Количество" CategoryProperty="Type" ValueProperty="Count" />
-                        </RadzenChart>
-                    </div>
-                </div>
-            </RadzenCard>
-        </div>
-    </div>-->
+    </div>
 </div>
 
 @code {
+    private IBranchStatisticsRepository branchStatistics = new BranchStatisticsRepository();
+    private List<Domain.Core.BranchEntities.BranchStatistics> branches = new List<Domain.Core.BranchEntities.BranchStatistics>();
+    private List<List<DataItemSeries1>> dataItems = new List<List<DataItemSeries1>>();
+    private List<List<Domain.Core.BranchEntities.BranchStatistics>> branchStatistics1 = new List<List<Domain.Core.BranchEntities.BranchStatistics>>();
+    int ur=0;
+    int fiz=0;
+    protected override void OnInitialized()
+    {
+        branches = branchStatistics.GetBranchStatisticses().ToList();
+        branchStatisticsUR = branches.Where(p => p.BranchId == ur).ToList();
+        branchStatisticsFIZ = branches.Where(p => p.BranchId == fiz).ToList();
+        for (int i = 0; i < 10; i++)
+        {
+            branchStatistics1.Add(branches.Where(p => p.BranchId == i).ToList());
+        }
+        //for (int i = 0; i < 10; i++)
+        //{
+        //    dataItems.Add(new List<DataItemSeries1>());
+        //    for (int j = 0; j < 12; j++)
+        //    {
+        //        dataItems[i].Add(new DataItemSeries1()
+        //        {
+        //            Date = branches.Where(p => p.BranchId == i && EF.Functions.Like(p.ReportDate, $"%{j}-%")).ToList()[0]
+        //        })
+        //    }
+        //}
+    }
+    private List<Domain.Core.BranchEntities.BranchStatistics> branchStatisticsUR = new List<Domain.Core.BranchEntities.BranchStatistics>();
+    void OnChangeUr()
+    {
+        branchStatisticsUR = branches.Where(p => p.BranchId == ur).ToList();
+    }
+    private List<Domain.Core.BranchEntities.BranchStatistics> branchStatisticsFIZ = new List<Domain.Core.BranchEntities.BranchStatistics>();
+    void OnChangeFiz()
+    {
+        branchStatisticsFIZ = branches.Where(p => p.BranchId == fiz).ToList();
+    }
+    class DataItemSeries1
+    {
+        public DateTime Date { get; set; }
+        public decimal BalancesheetCurrency { get; set; }
+    }
 
 }

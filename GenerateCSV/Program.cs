@@ -176,10 +176,15 @@ namespace GenerateCSV
                         FundsIndividuals= new Random().Next(600000, 1100000),
                         DebtObligationsIssued = new Random().Next(100000, 300000),
                         NumberEmployees = new Random().Next(60, 80),
-                        ReportDate=$"2021-{j}-09"
+                        ReportDate=$"2021-{j+1}-09"
                     }) ;
                     r++;
                 }
+            }
+            using (var writer = new StreamWriter("D:\\BranchStatistics.csv"))
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csv.WriteRecords(clients);
             }
         }
     }
@@ -208,10 +213,15 @@ namespace GenerateCSV
                         AccountId = new Random().Next(1, 50000),
                         Type=type,
                         Balance=new Random().Next(10, 3000),
-                        CreateDateTime = $"2021-{i}-{j}"
+                        CreateDateTime = $"2021-{i+1}-{j+1}"
                     }) ;
                     r++;
                 }
+            }
+            using (var writer = new StreamWriter("D:\\Transactions.csv"))
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csv.WriteRecords(clients);
             }
         }
     }
