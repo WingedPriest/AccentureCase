@@ -21,6 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Data", "Infr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Interfaces", "Services.Interfaces\Services.Interfaces.csproj", "{3E3BD4B5-7F44-4257-9063-A90AEFEEEB2D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Console", "Console", "{230E2188-521D-46C3-9F83-A765ED9B8959}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateCSV", "GenerateCSV\GenerateCSV.csproj", "{77EDE2A5-3B67-4A4A-8CDD-ADD292BA8DC5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,10 @@ Global
 		{3E3BD4B5-7F44-4257-9063-A90AEFEEEB2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E3BD4B5-7F44-4257-9063-A90AEFEEEB2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E3BD4B5-7F44-4257-9063-A90AEFEEEB2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77EDE2A5-3B67-4A4A-8CDD-ADD292BA8DC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77EDE2A5-3B67-4A4A-8CDD-ADD292BA8DC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77EDE2A5-3B67-4A4A-8CDD-ADD292BA8DC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77EDE2A5-3B67-4A4A-8CDD-ADD292BA8DC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +69,7 @@ Global
 		{2A83927B-041E-440C-8ECC-950B4748127C} = {C748480C-1B67-4A8F-A05B-4DB77C71B1E0}
 		{FCE9512A-76B7-45D5-88A1-94EE3215E9D5} = {C748480C-1B67-4A8F-A05B-4DB77C71B1E0}
 		{3E3BD4B5-7F44-4257-9063-A90AEFEEEB2D} = {510F9C1F-C2FB-4C29-BC36-FBED6F768505}
+		{77EDE2A5-3B67-4A4A-8CDD-ADD292BA8DC5} = {230E2188-521D-46C3-9F83-A765ED9B8959}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {938F156F-AB83-41F9-AA87-6CD2874046D5}
