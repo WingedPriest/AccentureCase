@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Domain.Interfaces
 {
-    interface IDebitСardRepository : IDisposable
+    public interface IDebitСardRepository : IDisposable
     {
         IEnumerable<DebitСard> GetDebitСards();
         DebitСard GetDebitСard(int id);

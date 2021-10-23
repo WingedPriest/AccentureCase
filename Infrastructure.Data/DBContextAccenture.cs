@@ -25,7 +25,7 @@ namespace Infrastructure.Data
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=DESKTOP-BOBS0F0;Database=DataBaseBankPred;Integrated Security=True");
+            optionsBuilder.UseSqlServer(@"Server=DESKTOP-BOBS0F0;Database=DataBaseBankProd;Integrated Security=True");
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Infrastructure.Data
 {
-    class PassportRepository
+    public class PassportRepository
     {
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Domain.Interfaces
 {
-    interface IAddressRepository : IDisposable
+    public interface IAddressRepository : IDisposable
     {
         IEnumerable<Address> GetAddresses();
         Address GetAddress(int id);

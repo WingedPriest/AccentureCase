@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Infrastructure.Data
 {
-    class TransactionRepository
+    public class TransactionRepository
     {
     }
 }

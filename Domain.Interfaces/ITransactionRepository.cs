@@ -5,7 +5,7 @@ using System.Transactions;
 
 namespace Domain.Interfaces
 {
-    interface ITransactionRepository : IDisposable
+    public interface ITransactionRepository : IDisposable
     {
         IEnumerable<Transaction> GetTransactions();
         Transaction GetTransaction(int id);

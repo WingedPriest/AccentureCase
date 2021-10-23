@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Domain.Interfaces
 {
-    interface IClientRepository : IDisposable
+    public interface IClientRepository : IDisposable
     {
         IEnumerable<Client> GetClients();
         Client GetClient(int id);

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Domain.Interfaces
 {
-    interface IPassportRepository : IDisposable
+    public interface IPassportRepository : IDisposable
     {
         IEnumerable<Passport> GetPassports();
         Passport GetPassport(int id);

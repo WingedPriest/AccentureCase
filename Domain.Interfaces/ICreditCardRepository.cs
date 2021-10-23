@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Domain.Interfaces
 {
-    interface ICreditCardRepository : IDisposable
+    public interface ICreditCardRepository : IDisposable
     {
         IEnumerable<CreditCard> GetCreditCards();
         CreditCard GetCreditCard(int id);

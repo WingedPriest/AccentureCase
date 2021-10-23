@@ -1,166 +1,153 @@
 ﻿@page "/statistics"
 @using System.Globalization
 <div class="container-fluid">
+    <h1 align="center"> Сборная статистика по банку</h1>
     <div class="row">
         <div class="col-6">
-            <div class="col">
-                <label>Сгладить</label>
-                <RadzenSwitch @bind-Value=@smooth />
-            </div>
-            <RadzenChart>
-                <RadzenAreaSeries Smooth="@smooth" Data="@revenue2019" CategoryProperty="Date" Title="2019" ValueProperty="Revenue" RenderingOrder="1">
-                </RadzenAreaSeries>
-                <RadzenAreaSeries Smooth="@smooth" Data="@revenue2020" CategoryProperty="Date" Title="2020" LineType="LineType.Dashed" ValueProperty="Revenue">
-                </RadzenAreaSeries>
-                <RadzenCategoryAxis Padding="20" FormatString="{0:MMM}" />
-                <RadzenValueAxis Formatter="@FormatAsUSD">
-                    <RadzenGridLines Visible="true" />
-                    <RadzenAxisTitle Text="Revenue in USD" />
-                </RadzenValueAxis>
-            </RadzenChart>
+            <RadzenCard Style="font-size: 24px" align="center">
+                <h2>Валютное состояние счетов в банке</h2>
+                <div class="row">
+                    <div class="col-2">
+                        <h6>Cумма счетов в рублях:@curAccounts[0].Count</h6>
+                        <h6>Сумма счетов в долларах:@curAccounts[1].Count</h6>
+                    </div>
+                    <div class="col-10">
+                        <RadzenChart>
+                            <RadzenColumnSeries Data="@curAccounts" CategoryProperty="Cur" Title="Баланс" LineType="LineType.Dashed" ValueProperty="Count" />
+                            <RadzenColumnOptions Radius="5" />
+                            <RadzenValueAxis Formatter="@FormatAsUSD">
+                                <RadzenGridLines Visible="true" />
+                                @*<RadzenAxisTitle Text="Revenue in USD"  Style=""/>*@
+                            </RadzenValueAxis>
+                        </RadzenChart>
+                    </div>
+                </div>
+            </RadzenCard>
         </div>
         <div class="col-6">
-
+            <RadzenCard Style="font-size: 24px" align="center">
+                <h2>Гендерный состав клиентов банка</h2>
+                <div class="row">
+                    <div class="col-4">
+                        <h6>Клиентов мужчин:@genderClients[0].Count</h6>
+                        <h6>Клиентов женщин:@genderClients[1].Count</h6>
+                    </div>
+                    <div class="col-8">
+                        <RadzenChart>
+                            <RadzenDonutSeries Data="@genderClients" CategoryProperty="Gender" ValueProperty="Count">
+                                <TitleTemplate>
+                                </TitleTemplate>
+                            </RadzenDonutSeries>
+                        </RadzenChart>
+                    </div>
+                </div>
+            </RadzenCard>
+            <RadzenCard Style="font-size: 24px" align="center">
+                <h2>Возрастной состав клиентов банка</h2>
+                <div class="row">
+                    @*<div class="col-2">
+                        <h6>18-44 года:@ageClients[0].Count</h6>
+                        <h6>45-59 лет:@ageClients[1].Count</h6>
+                        <h6>60-74 лет:@ageClients[2].Count</h6>
+                        <h6>75-90 лет:@ageClients[3].Count</h6>
+                        <h6>старше 90 лет:@ageClients[4].Count</h6>
+                    </div>*@
+                    <div class="col-12">
+                        <RadzenChart  Style="font-size: 16px">
+                            <RadzenPieSeries Data="@ageClients" Title="Количество" CategoryProperty="Type" ValueProperty="Count" />
+                        </RadzenChart>
+                    </div>
+                </div>
+            </RadzenCard>
         </div>
     </div>
 </div>
 @code {
-    DBContextAccenture dBContextAccenture = new DBContextAccenture();
+    private IClientRepository clientRepository = new ClientRepository();
+    private IAccountRepository accountRepository = new AccountRepository();
+    private List<Client> clients = new List<Client>();
+    private List<Account> accounts = new List<Account>();
+    private List<GenderClient> genderClients = new List<GenderClient>();
+    private List<CurAccount> curAccounts = new List<CurAccount>();
+    private List<AgeClient> ageClients= new List<AgeClient>();
     bool smooth;
-    class DataItem
+    protected override void OnInitialized()
     {
-        public DateTime Date { get; set; }
-        public double Revenue { get; set; }
+        clients = clientRepository.GetClients().ToList();
+        accounts = accountRepository.GetAccounts().ToList();
+        genderClients.Add(new GenderClient()
+        {
+            Gender = "Мужчины",
+            Count = clients.Count(u => u.Gender.Contains("M"))
+        });
+        genderClients.Add(new GenderClient()
+        {
+            Gender = "Женщины",
+            Count = clients.Count(u => u.Gender.Contains("F"))
+        });
+        curAccounts.Add(new CurAccount()
+        {
+            Cur = "Рубль",
+            Count = accounts.Where(u => u.Currency == "RUB").Sum(u => u.Balance)
+        });
+
+        curAccounts.Add(new CurAccount()
+        {
+            Cur = "Доллар",
+            Count = accounts.Where(u => u.Currency == "USD").Sum(u => u.Balance)
+        });
+
+        ageClients.Add(new AgeClient()
+        {
+            Type= "Молодые люди (молодой возраст) — 18-44 года",
+            Count = clients.Count(u => u.Age>=18 && u.Age < 44)
+        });
+        ageClients.Add(new AgeClient()
+        {
+            Type = "Люди среднего возраста (средний возраст) — 45-59 лет",
+            Count = clients.Count(u => u.Age >= 45 && u.Age < 59)
+        });
+        ageClients.Add(new AgeClient()
+        {
+            Type = "Люди пожилого возраста (пожилой возраст) — 60-74 лет",
+            Count = clients.Count(u => u.Age >= 60 && u.Age < 74)
+        });
+        ageClients.Add(new AgeClient()
+        {
+            Type = "Старые люди (старческий возраст, старость) — 75-90 лет",
+            Count = clients.Count(u => u.Age >= 75 && u.Age < 90)
+        });
+        ageClients.Add(new AgeClient()
+        {
+            Type = "Долгожители (возраст долголетия) – старше 90 лет",
+            Count = clients.Count(u => u.Age >= 90)
+        });
+
+
+
     }
+    class GenderClient
+    {
+        public string Gender { get; set; }
+        public int Count { get; set; }
+    }
+    class CurAccount
+    {
+        public string Cur { get; set; }
+        public decimal Count { get; set; }
+    }
+    class AgeClient
+    {
+        public string Type { get; set; }
+        public int Count { get; set; }
+    }
+
 
     string FormatAsUSD(object value)
     {
         return ((double)value).ToString("C0", CultureInfo.CreateSpecificCulture("en-US"));
     }
 
-    DataItem[] revenue2019 = new DataItem[] {
-        new DataItem
-        {
-            Date = DateTime.Parse("2019-01-01"),
-            Revenue = 234000
-        },
-        new DataItem
-        {
-            Date = DateTime.Parse("2019-02-01"),
-            Revenue = 269000
-        },
-        new DataItem
-        {
-            Date = DateTime.Parse("2019-03-01"),
-            Revenue = 233000
-        },
-        new DataItem
-        {
-            Date = DateTime.Parse("2019-04-01"),
-            Revenue = 244000
-        },
-        new DataItem
-        {
-            Date = DateTime.Parse("2019-05-01"),
-            Revenue = 214000
-        },
-        new DataItem
-        {
-            Date = DateTime.Parse("2019-06-01"),
-            Revenue = 253000
-        },
-        new DataItem
-        {
-            Date = DateTime.Parse("2019-07-01"),
-            Revenue = 274000
-        },
-        new DataItem
-        {
-            Date = DateTime.Parse("2019-08-01"),
-            Revenue = 284000
-        },
-        new DataItem
-        {
-            Date = DateTime.Parse("2019-09-01"),
-            Revenue = 273000
-        },
-        new DataItem
-        {
-            Date = DateTime.Parse("2019-10-01"),
-            Revenue = 282000
-        },
-        new DataItem
-        {
-            Date = DateTime.Parse("2019-11-01"),
-            Revenue = 289000
-        },
-        new DataItem
-        {
-            Date = DateTime.Parse("2019-12-01"),
-            Revenue = 294000
-        }
-    };
 
-    DataItem[] revenue2020 = new DataItem[] {
-        new DataItem
-        {
-            Date = DateTime.Parse("2019-01-01"),
-            Revenue = 334000
-        },
-        new DataItem
-        {
-            Date = DateTime.Parse("2019-02-01"),
-            Revenue = 369000
-        },
-        new DataItem
-        {
-            Date = DateTime.Parse("2019-03-01"),
-            Revenue = 333000
-        },
-        new DataItem
-        {
-            Date = DateTime.Parse("2019-04-01"),
-            Revenue = 344000
-        },
-        new DataItem
-        {
-            Date = DateTime.Parse("2019-05-01"),
-            Revenue = 314000
-        },
-        new DataItem
-        {
-            Date = DateTime.Parse("2019-06-01"),
-            Revenue = 353000
-        },
-        new DataItem
-        {
-            Date = DateTime.Parse("2019-07-01"),
-            Revenue = 374000
-        },
-        new DataItem
-        {
-            Date = DateTime.Parse("2019-08-01"),
-            Revenue = 384000
-        },
-        new DataItem
-        {
-            Date = DateTime.Parse("2019-09-01"),
-            Revenue = 373000
-        },
-        new DataItem
-        {
-            Date = DateTime.Parse("2019-10-01"),
-            Revenue = 382000
-        },
-        new DataItem
-        {
-            Date = DateTime.Parse("2019-11-01"),
-            Revenue = 389000
-        },
-        new DataItem
-        {
-            Date = DateTime.Parse("2019-12-01"),
-            Revenue = 394000
-        }
-    };
-}
+    }
+
