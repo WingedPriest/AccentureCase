@@ -21,6 +21,6 @@ namespace Domain.Core
         [Required]
         public decimal Balance { get; set; }
         [Required]
-        public DateTime CreateDateTime { get; set; }
+        public string CreateDateTime { get; set; }
     }
 }

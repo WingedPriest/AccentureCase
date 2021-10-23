@@ -3,6 +3,8 @@ using CsvHelper;
 using System.Collections.Generic;
 using System.IO;
 using System.Globalization;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace GenerateCSV
 {
@@ -140,6 +142,79 @@ namespace GenerateCSV
             }
         }
     }
+
+    class BranchStatistics
+    {
+        public int Id { get; set; }
+        public int BranchId { get; set; }//Номер филиала
+        public decimal BalancesheetCurrency { get; set; }//Баланс ввалюты
+        public decimal BalanceSheetProfit { get; set; }//Балансовая прибыль
+        public decimal LoansLegalEntities { get; set; }//Кредиты юридическим лицам
+        public decimal LoansIndividuals { get; set; }//Кредиты физическим лицам
+        public decimal FundsLegalEntities { get; set; }//Средства юридических лиц
+        public decimal FundsIndividuals { get; set; }//Средства физических лиц
+        public decimal DebtObligationsIssued { get; set; }//Выпущенные долговые обязательства
+        public decimal NumberEmployees { get; set; }//Численность сотрудников
+        public string ReportDate { get; set; }//Дата
+        public static void CreateCSVClient()
+        {
+            List<BranchStatistics> clients = new List<BranchStatistics>();
+            int r = 1;
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 12; j++)
+                {
+                    clients.Add(new BranchStatistics()
+                    {
+                        Id = r,
+                        BranchId = i,
+                        BalancesheetCurrency = new Random().Next(700000, 2000000),
+                        BalanceSheetProfit=new Random().Next(100000,600000),
+                        LoansLegalEntities=new Random().Next(400000,1500000),
+                        LoansIndividuals=new Random().Next(100000,800000),
+                        FundsLegalEntities = new Random().Next(800000, 1300000),
+                        FundsIndividuals= new Random().Next(600000, 1100000),
+                        DebtObligationsIssued = new Random().Next(100000, 300000),
+                        NumberEmployees = new Random().Next(60, 80),
+                        ReportDate=$"2021-{j}-09"
+                    }) ;
+                    r++;
+                }
+            }
+        }
+    }
+    public class Transaction
+    {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Required]
+        public int Id { get; set; }
+        public int AccountId { get; set; }
+        public string Type { get; set; }
+        public decimal Balance { get; set; }
+        public string CreateDateTime { get; set; }
+        public static void CreateCSVClient()
+        {
+            List<Transaction> clients = new List<Transaction>();
+            int r = 1;
+            for (int i = 0; i < 12; i++)
+            {
+                for (int j = 0; j < 30; j++)
+                {
+                    string type;
+                    if (new Random().Next(0, 2) == 1) type = "DEPO"; else type = "CRED";
+                    clients.Add(new Transaction()
+                    {
+                        Id = r,
+                        AccountId = new Random().Next(1, 50000),
+                        Type=type,
+                        Balance=new Random().Next(10, 3000),
+                        CreateDateTime = $"2021-{i}-{j}"
+                    }) ;
+                    r++;
+                }
+            }
+        }
+    }
     class Program
     {
         static void Main(string[] args)
@@ -148,7 +223,8 @@ namespace GenerateCSV
             Account.CreateCSVClient();
             CreditCard.CreateCSVClient();
             Passport.CreateCSVClient();
-            Console.WriteLine("Hello World!");
+            BranchStatistics.CreateCSVClient();
+            Transaction.CreateCSVClient();
         }
     }
 }

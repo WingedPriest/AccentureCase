@@ -1,0 +1,69 @@
+﻿@page "/branchstatistics"
+@using System.Globalization
+
+<div class="container-fluid">
+    <!--<h1 align="center">Статистика по филиалам</h1>
+    <div class="row">
+        <div class="col-6">
+            <RadzenCard Style="font-size: 24px" align="center">
+                <h2>Валютное состояние счетов в банке</h2>
+                <div class="row">
+                    <div class="col-2">
+                        <h6>Cумма счетов в рублях:@curAccounts[0].Count</h6>
+                        <h6>Сумма счетов в долларах:@curAccounts[1].Count</h6>
+                    </div>
+                    <div class="col-10">
+                        <RadzenChart>
+                            <RadzenColumnSeries Data="@curAccounts" CategoryProperty="Cur" Title="Баланс" LineType="LineType.Dashed" ValueProperty="Count" />
+                            <RadzenColumnOptions Radius="5" />
+                            <RadzenValueAxis Formatter="@FormatAsUSD">
+                                <RadzenGridLines Visible="true" />-->
+                                @*<RadzenAxisTitle Text="Revenue in USD"  Style=""/>*@
+                            <!--</RadzenValueAxis>
+                        </RadzenChart>
+                    </div>
+                </div>
+            </RadzenCard>
+        </div>
+        <div class="col-6">
+            <RadzenCard Style="font-size: 24px" align="center">
+                <h2>Гендерный состав клиентов банка</h2>
+                <div class="row">
+                    <div class="col-4">
+                        <h6>Клиентов мужчин:@genderClients[0].Count</h6>
+                        <h6>Клиентов женщин:@genderClients[1].Count</h6>
+                    </div>
+                    <div class="col-8">
+                        <RadzenChart>
+                            <RadzenDonutSeries Data="@genderClients" CategoryProperty="Gender" ValueProperty="Count">
+                                <TitleTemplate>
+                                </TitleTemplate>
+                            </RadzenDonutSeries>
+                        </RadzenChart>
+                    </div>
+                </div>
+            </RadzenCard>
+            <RadzenCard Style="font-size: 24px" align="center">
+                <h2>Возрастной состав клиентов банка</h2>
+                <div class="row">-->
+                    @*<div class="col-2">
+                            <h6>18-44 года:@ageClients[0].Count</h6>
+                            <h6>45-59 лет:@ageClients[1].Count</h6>
+                            <h6>60-74 лет:@ageClients[2].Count</h6>
+                            <h6>75-90 лет:@ageClients[3].Count</h6>
+                            <h6>старше 90 лет:@ageClients[4].Count</h6>
+                        </div>*@
+                    <!--<div class="col-12">
+                        <RadzenChart Style="font-size: 16px">
+                            <RadzenPieSeries Data="@ageClients" Title="Количество" CategoryProperty="Type" ValueProperty="Count" />
+                        </RadzenChart>
+                    </div>
+                </div>
+            </RadzenCard>
+        </div>
+    </div>-->
+</div>
+
+@code {
+
+}

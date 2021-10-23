@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Domain.Core;
-
+using Domain.Core.BranchEntities;
 
 namespace Infrastructure.Data
 {
@@ -18,6 +18,7 @@ namespace Infrastructure.Data
         public DbSet<DebitСard> DebitСards { get; set; }
         public DbSet<Passport> Passports { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<BranchStatistics> BranchStatistics { get; set; }
 
         public DBContextAccenture()
         {
