@@ -7,10 +7,10 @@ namespace Domain.Interfaces
 {
     public interface ITransactionRepository : IDisposable
     {
-        IEnumerable<Transaction> GetTransactions();
-        Transaction GetTransaction(int id);
-        void Create(Transaction item);
-        void Update(Transaction item);
+        IEnumerable<Domain.Core.Transaction> GetTransactions();
+        Domain.Core.Transaction GetTransaction(int id);
+        void Create(Domain.Core.Transaction item);
+        void Update(Domain.Core.Transaction item);
         void Delete(int id);
         void Save();
     }

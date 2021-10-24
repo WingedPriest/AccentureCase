@@ -142,7 +142,6 @@ namespace GenerateCSV
             }
         }
     }
-
     class BranchStatistics
     {
         public int Id { get; set; }
@@ -175,7 +174,7 @@ namespace GenerateCSV
                         FundsLegalEntities = new Random().Next(800000, 1300000),
                         FundsIndividuals= new Random().Next(600000, 1100000),
                         DebtObligationsIssued = new Random().Next(100000, 300000),
-                        NumberEmployees = new Random().Next(60, 80),
+                        NumberEmployees = new Random().Next(60, 67),
                         ReportDate=$"2021-{j+1}-09"
                     }) ;
                     r++;
@@ -225,6 +224,135 @@ namespace GenerateCSV
             }
         }
     }
+    public class Address
+    {
+        public int Id { get; set; }
+        public int PassportId { get; set; }
+        public string StringAddress { get; set; }
+        public string Satus { get; set; }
+        public DateTime CreateDate { get; set; }
+        public static void CreateCSVClient()
+        {
+            List<Address> clients = new List<Address>();
+            for (int i = 0; i < 50000; i++)
+            {
+                clients.Add(new Address()
+                {
+                    Id = i + 1,
+                    PassportId = i + 1,
+                    StringAddress="asdasfagasdasd",
+                    Satus = "Active",
+                    CreateDate = DateTime.UtcNow
+                });
+            }
+            using (var writer = new StreamWriter("D:\\Addresses.csv"))
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csv.WriteRecords(clients);
+            }
+        }
+    }
+    public class CreditCardTransaction
+    {
+        public int Id { get; set; }
+        public int CreditСardId { get; set; }
+        public string Type { get; set; }
+        public decimal Balance { get; set; }
+        public DateTime CreateDateTime { get; set; }
+        public static void CreateCSVClient()
+        {
+            List<CreditCardTransaction> clients = new List<CreditCardTransaction>();
+            int r = 1;
+            for (int i = 0; i < 12; i++)
+            {
+                for (int j = 0; j < 30; j++)
+                {
+                    string type;
+                    if (new Random().Next(0, 2) == 1) type = "DEPO"; else type = "CRED";
+                    clients.Add(new CreditCardTransaction()
+                    {
+                        Id = r,
+                        CreditСardId = new Random().Next(1, 50000),
+                        Type = type,
+                        Balance = new Random().Next(10, 3000),
+                        CreateDateTime = DateTime.Now
+                    });
+                    r++;
+                }
+            }
+            using (var writer = new StreamWriter("D:\\CreditCardTransactions.csv"))
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csv.WriteRecords(clients);
+            }
+        }
+    }
+    public class DebitСard
+    {
+        public int Id { get; set; }
+        public int ClientId { get; set; }
+        public string NumCard { get; set; }
+        public DateTime Date { get; set; }
+        public string CVV { get; set; }
+        public decimal Balance { get; set; }
+        public DateTime CreateDateTime { get; set; }
+        public static void CreateCSVClient()
+        {
+            List<DebitСard> clients = new List<DebitСard>();
+            for (int i = 0; i < 50000; i++)
+            {
+                clients.Add(new DebitСard()
+                {
+                    Id = i + 1,
+                    ClientId = new Random().Next(1, 25000),
+                    Balance = new Random().Next(1, 500000),
+                    NumCard = new Random().Next(1000, 9999).ToString() + " " + new Random().Next(1000, 9999).ToString() + " " + new Random().Next(1000, 9999).ToString() + " " + new Random().Next(1000, 9999).ToString(),
+                    CreateDateTime = Convert.ToDateTime("08-12"),
+                    CVV = new Random().Next(100, 999).ToString()
+                });
+            }
+            using (var writer = new StreamWriter("D:\\DebitСards.csv"))
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csv.WriteRecords(clients);
+            }
+        }
+    }
+    public class DebitCardTransactions
+    {
+        public int Id { get; set; }
+        public int DebitСardId { get; set; }
+        public string Type { get; set; }
+        public decimal Balance { get; set; }
+        public DateTime CreateDateTime { get; set; }
+        public static void CreateCSVClient()
+        {
+            List<DebitCardTransactions> clients = new List<DebitCardTransactions>();
+            int r = 1;
+            for (int i = 0; i < 12; i++)
+            {
+                for (int j = 0; j < 30; j++)
+                {
+                    string type;
+                    if (new Random().Next(0, 2) == 1) type = "DEPO"; else type = "CRED";
+                    clients.Add(new DebitCardTransactions()
+                    {
+                        Id = r,
+                        DebitСardId = new Random().Next(1, 50000),
+                        Type = type,
+                        Balance = new Random().Next(10, 3000),
+                        CreateDateTime = DateTime.Now
+                    });
+                    r++;
+                }
+            }
+            using (var writer = new StreamWriter("D:\\DebitCardTransactions.csv"))
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csv.WriteRecords(clients);
+            }
+        }
+    }
     class Program
     {
         static void Main(string[] args)
@@ -235,6 +363,10 @@ namespace GenerateCSV
             Passport.CreateCSVClient();
             BranchStatistics.CreateCSVClient();
             Transaction.CreateCSVClient();
+            Address.CreateCSVClient();
+            DebitСard.CreateCSVClient();
+            CreditCardTransaction.CreateCSVClient();
+            DebitCardTransactions.CreateCSVClient();
         }
     }
 }

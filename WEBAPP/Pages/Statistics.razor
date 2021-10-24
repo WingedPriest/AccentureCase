@@ -23,6 +23,21 @@
                     </div>
                 </div>
             </RadzenCard>
+            <RadzenCard Style="font-size: 24px" align="center">
+                <h2>Cтатистика пополнений и снятий со счетов</h2>
+                <div class="row">
+                    <div class="col-12">
+                        <RadzenChart>
+                            <RadzenColumnSeries Data="@transClients" CategoryProperty="Type" Title="Баланс" LineType="LineType.Dashed" ValueProperty="Count" />
+                            <RadzenColumnOptions Radius="5" />
+                            <RadzenValueAxis >
+                                <RadzenGridLines Visible="true" />
+                                @*<RadzenAxisTitle Text="Revenue in USD"  Style=""/>*@
+                            </RadzenValueAxis>
+                        </RadzenChart>
+                    </div>
+                </div>
+            </RadzenCard>
         </div>
         <div class="col-6">
             <RadzenCard Style="font-size: 24px" align="center">
@@ -65,16 +80,20 @@
 @code {
     private IClientRepository clientRepository = new ClientRepository();
     private IAccountRepository accountRepository = new AccountRepository();
+    private ITransactionRepository transactionRepository = new TransactionRepository();
+    private List<Transaction> transactions = new List<Transaction>();
     private List<Client> clients = new List<Client>();
     private List<Account> accounts = new List<Account>();
     private List<GenderClient> genderClients = new List<GenderClient>();
     private List<CurAccount> curAccounts = new List<CurAccount>();
     private List<AgeClient> ageClients= new List<AgeClient>();
+    private List<TransClient> transClients = new List<TransClient>();
     bool smooth;
     protected override void OnInitialized()
     {
         clients = clientRepository.GetClients().ToList();
         accounts = accountRepository.GetAccounts().ToList();
+        transactions = transactionRepository.GetTransactions().ToList();
         genderClients.Add(new GenderClient()
         {
             Gender = "Мужчины",
@@ -99,28 +118,38 @@
 
         ageClients.Add(new AgeClient()
         {
-            Type= "Молодые люди (молодой возраст) — 18-44 года",
+            Type= "18-44 года",
             Count = clients.Count(u => u.Age>=18 && u.Age < 44)
         });
         ageClients.Add(new AgeClient()
         {
-            Type = "Люди среднего возраста (средний возраст) — 45-59 лет",
+            Type = "Л45-59 лет",
             Count = clients.Count(u => u.Age >= 45 && u.Age < 59)
         });
         ageClients.Add(new AgeClient()
         {
-            Type = "Люди пожилого возраста (пожилой возраст) — 60-74 лет",
+            Type = "60-74 лет",
             Count = clients.Count(u => u.Age >= 60 && u.Age < 74)
         });
         ageClients.Add(new AgeClient()
         {
-            Type = "Старые люди (старческий возраст, старость) — 75-90 лет",
+            Type = "75-90 лет",
             Count = clients.Count(u => u.Age >= 75 && u.Age < 90)
         });
         ageClients.Add(new AgeClient()
         {
-            Type = "Долгожители (возраст долголетия) – старше 90 лет",
+            Type = "90 лет",
             Count = clients.Count(u => u.Age >= 90)
+        });
+        transClients.Add(new TransClient()
+        {
+            Type = "Пополнения",
+            Count = ((int)transactions.Where(u => u.Type == "CRED").Sum(u => u.Balance))
+        });
+        transClients.Add(new TransClient()
+        {
+            Type = "Снятия",
+            Count = ((int)transactions.Where(u => u.Type == "DEPO").Sum(u => u.Balance))
         });
 
 
@@ -137,6 +166,11 @@
         public decimal Count { get; set; }
     }
     class AgeClient
+    {
+        public string Type { get; set; }
+        public int Count { get; set; }
+    }
+    class TransClient
     {
         public string Type { get; set; }
         public int Count { get; set; }

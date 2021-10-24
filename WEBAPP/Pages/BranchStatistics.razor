@@ -26,20 +26,52 @@
                             <div class="col-6">
                                 <h2>Выдача кредитов юр. лицам</h2>
                                 <p>Филиал № @ur</p>
-                                <RadzenSlider @bind-Value=@ur TValue="int" Min="0" Max="9" Change=@(args => OnChangeUr())/>
+                                <RadzenSlider @bind-Value=@ur TValue="int" Min="0" Max="9" Change=@(args => OnChangeUr()) />
                                 <RadzenChart>
-                                        <RadzenPieSeries Data="@branchStatisticsUR" Title="Выдано" CategoryProperty="ReportDate" ValueProperty="LoansLegalEntities" />
+                                    <RadzenPieSeries Data="@branchStatisticsUR" Title="Выдано" CategoryProperty="ReportDate" ValueProperty="LoansLegalEntities" />
+                                </RadzenChart>
+                                <h2>Средства юридических лиц в филиале</h2>
+                                <RadzenChart Style="font-size:10px">
+                                    <RadzenColumnSeries Data="@branchStatisticsUR" CategoryProperty="ReportDate" Title="Баланс средств" LineType="LineType.Dashed" ValueProperty="LoansLegalEntities" />
+                                    <RadzenColumnOptions Radius="5" />
+                                    <RadzenValueAxis>
+                                        <RadzenGridLines Visible="true" />
+                                        <RadzenAxisTitle Text="Cредств в филиале" />
+                                    </RadzenValueAxis>
                                 </RadzenChart>
                             </div>
                             <div class="col-6">
                                 <h2>Выдача кредитов физ.лицам</h2>
-                                <p>Филиал № @ur</p>
+                                <p>Филиал № @fiz</p>
                                 <RadzenSlider @bind-Value=@fiz TValue="int" Min="0" Max="9" Change=@(args => OnChangeFiz()) />
                                 <RadzenChart>
                                     <RadzenPieSeries Data="@branchStatisticsFIZ" Title="Выдано" CategoryProperty="ReportDate" ValueProperty="LoansIndividuals" />
                                 </RadzenChart>
+                                <h2>Средства физических лиц в филиале</h2>
+                                <RadzenChart Style="font-size:10px">
+                                    <RadzenColumnSeries Data="@branchStatisticsFIZ" CategoryProperty="ReportDate" Title="Баланс средств" LineType="LineType.Solid" ValueProperty="LoansIndividuals" />
+                                    <RadzenColumnOptions Radius="5" />
+                                    <RadzenValueAxis>
+                                        <RadzenGridLines Visible="true" />
+                                        <RadzenAxisTitle Text="Cредств в филиале" />
+                                    </RadzenValueAxis>
+                                </RadzenChart>
                             </div>
                         </div>
+                        <h2>Количество сотрудников в филиалах</h2>
+                        <RadzenChart>
+                            @foreach (var item in branchStatistics1)
+                            {
+                                <RadzenLineSeries Data="@item" CategoryProperty="ReportDate" Title=@item[0].ToString() LineType="LineType.Dashed" ValueProperty="NumberEmployees">
+                                    <RadzenMarkers MarkerType="MarkerType.Circle" />
+                                </RadzenLineSeries>
+                            }
+                            <RadzenCategoryAxis Padding="20" FormatString="{0:MMM}" />
+                            <RadzenValueAxis>
+                                <RadzenGridLines Visible="true" />
+                                <RadzenAxisTitle Text="Количество сотрудников" />
+                            </RadzenValueAxis>
+                        </RadzenChart>
                     </div>
                 </div>
             </RadzenCard>
